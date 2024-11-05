@@ -259,7 +259,7 @@ async function handleCheckUsername() {
   let canCreate = await response.json();
   if (!canCreate.success) {
     setIsPopup(true);
-    setMsg("This Username is Not Available");
+    setMsg("This username is already taken. Please choose a different username");
     return;
   }
 
@@ -299,7 +299,18 @@ useEffect(() => {
               <div>
                 <input
                   type="text"
-                  onChange={(e) => setusernameValue(e.target.value)}
+                  onChange={(e) => {
+                    const newUsername = e.target.value;
+                    // Check if the new username contains any spaces
+                    if (/\s/.test(newUsername)) {
+                        setMsg("Usernames cannot contain spaces. Please enter a valid username without spaces.");
+                        setIsPopup(true);
+                    } else {
+                        // If no spaces, update the username state
+                        setusernameValue(newUsername);
+                    }
+                  }}
+                  
                   value={usernameValue}
                   className={`md:w-[65%] p-[10px] mb-[10px] border-b-2 bg-none background-none text-black md:ml-[70px] max-sm:w-[100%] rounded-none ${theme ? "border-gray-500" : "border-white text-white"} border-[#837b7b] m-auto input-place`}
                   placeholder="Enter your Username"
